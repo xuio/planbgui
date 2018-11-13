@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>PLANB_LOL</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<style type="text/css">
+pre {
+	height: 250px;
+    max-height: 250px;
+    overflow-y: scroll;
+    padding-top: 20px;
+}
+	</style>
+</head>
+<body>
+	<div class="container-fluid">
+		<h3>Raum1:</h3>
+		<div class="btn-group btn-group-toggle" data-toggle="buttons">
+			<label class="btn btn-outline-danger active">
+				<input type="radio" name="options" id="off1" autocomplete="off" checked>Stop
+			</label>
+			<label class="btn btn-outline-success">
+				<input type="radio" name="options" id="on1" autocomplete="off"> Start
+			</label>
+		</div>
+		<pre id="command1">
+		</pre>
+		<h3>Raum2:</h3>
+		<div class="btn-group btn-group-toggle" data-toggle="buttons">
+			<label class="btn btn-outline-danger active">
+				<input type="radio" name="options" id="off2" autocomplete="off" checked>Stop
+			</label>
+			<label class="btn btn-outline-success">
+				<input type="radio" name="options" id="on2" autocomplete="off"> Start
+			</label>
+		</div>
+		<pre id="command2">
+		</pre>
+	</div>
+
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+	<script>
+$(function() {
+	var buttonState = [false, false];
+	var buttonText = ['Start', 'Stop'];
+	var socket = io();
+
+	$('#off1').click(function(){
+		socket.emit('button', 'off1');
+	});
+
+	$('#on1').click(function(){
+		$('#command1').html('');
+		socket.emit('button', 'on1');
+	});
+
+	$('#off2').click(function(){
+		socket.emit('button', 'off2');
+	});
+
+	$('#on2').click(function(){
+		$('#command2').html('');
+		socket.emit('button', 'on2');
+	});
+
+	socket.on('process1', function(msg){
+		console.log(msg);
+		$('#command1').append(msg.toString());
+		$('#command1').scrollTop( $('#command1').prop("scrollHeight") );
+	});
+
+	socket.on('process2', function(msg){
+		$('#command2').append(msg.toString());
+		$('#command2').scrollTop( $('#command2').prop("scrollHeight") );
+	});
+
+});
+	</script>
+</body>
+</html>
