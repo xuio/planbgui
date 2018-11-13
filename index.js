@@ -33,7 +33,9 @@ io.on('connection', (socket) => {
 			});
 			break;
 		case 'off1':
-			process[0].kill('SIGINT');
+			if(process[0] !== null){
+				process[0].kill('SIGINT');
+			}
 			console.log('off1');
 			break;
 		case 'on2':
@@ -44,7 +46,9 @@ io.on('connection', (socket) => {
 			console.log('on2');
 			break;
 		case 'off2':
-			process[1].kill('SIGINT');
+			if(process[1] !== null){
+				process[1].kill('SIGINT');
+			}
 			console.log('off2');
 			break;
 		}
